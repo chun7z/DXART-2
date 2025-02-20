@@ -1,0 +1,337 @@
+html {
+    background-color: black;
+}
+  
+body {
+margin: 0;
+padding: 0;
+display: flex;
+justify-content: center;
+align-items: flex-start;
+min-height: 100vh;
+overflow-x: hidden;
+}
+
+.container {
+position: relative;
+width: 100%;
+height: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.background-image {
+width: 100%; 
+height: auto; 
+display: block;
+}
+
+.lantern {
+    position: absolute;
+    width: 100px; 
+    height: 100px;
+    background: rgba(255, 223, 0, 0.3);
+    border-radius: 50%;
+    transition: transform 0.3s ease, background 0.3s;
+}
+
+.lantern:hover {
+    transform: scale(1.2);
+    background: rgba(255, 215, 0, 0.8);
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
+}
+
+.text-container {
+position: fixed; 
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+text-align: center;
+padding: 0;
+width: 50%;
+z-index: 100; 
+}
+
+h1 {
+font-size: 5em;
+color: white;
+text-shadow: 2px 2px 5px rgba(255, 223, 0, 0.5);
+font-family: 'Parisienne', serif;
+margin-bottom: 20px;
+}
+
+p {
+color: white;
+font-family: 'Hedvig Letters Serif', serif;
+font-size: 1.2em;
+text-shadow: 1px 1px 3px rgba(255, 223, 0, 0.5);
+line-height: 1.6;
+}
+
+.home-button {
+position: absolute;
+top: 15px;
+right: 15px;
+color: white;
+border: none;
+border-radius: 30px;
+padding: 8px 16px;
+font-family: 'Hedvig Letters Sans', sans-serif;
+font-size: 1em;
+cursor: pointer;
+transition: all 0.3s ease;
+text-decoration: none;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.home-button:hover {
+background-color: rgba(255, 215, 0, 0.8);
+transform: scale(1.05);
+box-shadow: 0 0 10px rgba(255, 165, 0, 0.6);
+}
+
+.home-button:active {
+transform: scale(0.95);
+}
+
+.home-button svg {
+margin-right: 5px;
+width: 16px;
+height: 16px;
+}
+
+/* uiux */
+.uiux {
+position: relative;
+min-height: 200vh;
+width: 100%;
+}
+
+.uiux .text-container {
+background-color: rgba(0, 0, 0, 0.7); 
+}
+
+.uiux .image-container {
+position: relative;
+width: 100%;
+min-height: 200vh;
+padding: 10vh 5vw; 
+}
+
+.uiux .image-container img {
+position: absolute;
+width: auto; 
+height: auto;
+max-width: 30%; 
+max-height: auto; 
+object-fit: contain; 
+border-radius: 8px;
+opacity: 0;
+animation: fade 12s infinite;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 保持错落定位 */
+.uiux .image-container img:nth-child(1) {
+top: 5%; left: 5%;
+animation-delay: 0s;
+}
+.uiux .image-container img:nth-child(2) {
+top: 12%; left: 40%;
+animation-delay: 1s;
+}
+.uiux .image-container img:nth-child(3) {
+top: 18%; left: 65%;
+animation-delay: 2s;
+}
+.uiux .image-container img:nth-child(4) {
+top: 28%; left: 25%;
+animation-delay: 3s;
+}
+.uiux .image-container img:nth-child(5) {
+top: 35%; left: 50%;
+animation-delay: 4s;
+}
+.uiux .image-container img:nth-child(6) {
+top: 42%; left: 0%;
+animation-delay: 5s;
+}
+.uiux .image-container img:nth-child(7) {
+top: 50%; left: 70%;
+animation-delay: 6s;
+}
+.uiux .image-container img:nth-child(8) {
+top: 58%; left: 30%;
+animation-delay: 7s;
+}
+.uiux .image-container img:nth-child(9) {
+top: 65%; left: 65%;
+animation-delay: 8s;
+}
+.uiux .image-container img:nth-child(10) {
+top: 72%; left: 15%;
+animation-delay: 9s;
+}
+.uiux .image-container img:nth-child(11) {
+top: 80%; left: 40%;
+animation-delay: 10s;
+}
+.uiux .image-container img:nth-child(12) {
+top: 85%; left: 25%;
+animation-delay: 11s;
+}
+.uiux .image-container img:nth-child(13) {
+top: 92%; left: 55%;
+animation-delay: 12s;
+}
+.uiux .image-container img:nth-child(14) {
+top: 100%; left: 25%;
+animation-delay: 13s;
+}
+.uiux .image-container img:nth-child(15) {
+top: 110%; left: 40%;
+animation-delay: 14s;
+}
+.uiux .image-container img:nth-child(16) {
+top: 120%; left: 20%;
+animation-delay: 15s;
+}
+
+@keyframes fade {
+0%, 100% { opacity: 0; transform: scale(0.8); }
+20% { opacity: 1; transform: scale(1); }
+50% { opacity: 1; }
+80% { opacity: 0; transform: scale(1.1); }
+}
+
+/* web */
+#no-scroll {
+    overflow: hidden;
+}
+
+.code-showcase {
+    height: 100%;
+}
+
+.code-container {
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    height: 100%; 
+    overflow: hidden;
+    background: none;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+code {
+    font-family: "Fira Code", "Consolas", "Courier New", monospace;
+    font-size: 1em;
+    display: block;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background: none;
+}
+
+.scroll {
+    display: inline-block;
+    white-space: pre-wrap;
+    overflow-y: hidden;
+    max-height: 100%;
+    animation: scrollUp 4s linear infinite;
+}
+
+@keyframes scrollUp {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(-100%);
+    }
+}
+
+/* violinist */
+#background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    z-index: -1; 
+}
+
+/* free */
+
+.career-map {
+    position: relative;
+    height: 100vh; 
+    width: 100%;
+}
+
+.career-item {
+    position: absolute;
+    width: 200px;
+    padding: 10px;
+    color: aliceblue;
+    background-color: rgba(255, 223, 0, 0.3);
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.career-item-1 {
+    top: 10%;
+    left: 15%;
+}
+
+.career-item-2 {
+    top: 5%;
+    left: 60%;
+}
+
+.career-item-3 {
+    top: 60%;
+    left: 5%;
+}
+
+.career-item-4 {
+    top: 82%;
+    left: 50%;
+}
+
+.career-item-5 {
+    top: 65%;
+    left: 80%;
+}
+
+.career-item:hover {
+    background-color: rgba(255, 215, 0, 0.8);
+    box-shadow: 0 0 10px rgba(255, 165, 0, 0.6);
+}
+
+.job-info {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: none;
+    color: white;
+    padding: 5px;
+    display: none; 
+    width: 200px;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.career-item:hover .job-info {
+    display: block; 
+}
+
+

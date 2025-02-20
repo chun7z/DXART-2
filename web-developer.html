@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" id="no-scroll">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyFuture</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="code-showcase">
+        <div class="text-container">
+            <a href="index.html" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Home
+            </a>
+            <h1>Web Developer</h1>
+            <p>I build the digital world with each line of code.</p>
+        </div>
+        <div class="code-container">
+            <pre class="scroll"><code class="language-jsx">
+&lt;import { ref, remove, get, set } from 'firebase/database';&gt;
+&lt;import { db } from '../../firebase/firebase';&gt;
+&lt;import { useNavigate } from 'react-router-dom';&gt;
+
+export function BoardLog({ logData, userId, bookTitle }) {
+    const navigate = useNavigate();
+    const handleDelete = (logId) =&gt; {
+        const logRef = ref(db, `${userId}/${bookTitle}/${logId}`);
+        remove(logRef)
+            .then(() =&gt; {
+                console.log(`Log ${logId} deleted successfully.`);
+            })
+            .catch((error) =&gt; {
+                console.error("Error deleting log:", error);
+            });
+    };
+
+    const handleMove = (logId) =&gt; {
+        navigate('/move-to', { state: { userId, bookTitle, logId } });
+    };
+
+    console.log(logData)
+
+
+    const logList = logData.map((log) =&gt; (
+        &lt;div key={log.id} id={log.id} className="board-log"&gt;
+            &lt;LogHeading
+                dataObj={log}
+                handleDelete={() =&gt; handleDelete(log.id)}
+                handleMove={() =&gt; handleMove(log.id)}
+            /&gt;
+            &lt;LogContent dataObj={log} /&gt;
+        &lt;/div&gt;
+    ));
+
+
+    return &lt;div&gt;{logList}&lt;/div&gt;;
+}
+
+function LogHeading({ dataObj, handleDelete, handleMove }) {
+    return (
+        &lt;div className="log-heading"&gt;
+            &lt;div className="top"&gt;
+                &lt;h2 className="title"&gt;{dataObj.title}&lt;/h2&gt;
+                &lt;div className="top-right"&gt;
+                    &lt;button className="btn move-to" onClick={handleMove}&gt;
+                        Move To
+                    &lt;/button&gt;
+                    &lt;button className="btn delete" onClick={handleDelete}&gt;
+                        Remove from book
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div className="time-rate"&gt;
+                &lt;p className="des-time"&gt;{dataObj.destination} - From {dataObj.start} to {dataObj.end}&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    );
+}
+
+function LogContent({ dataObj }) {
+    return (
+        &lt;div className="content"&gt;
+            &lt;p className="brief"&gt;{dataObj.content}&lt;/p&gt;
+            {dataObj.images &amp;&amp; (
+                &lt;img 
+                    src={dataObj.images} 
+                    alt={dataObj.title} 
+                /&gt;
+            )}
+        &lt;/div&gt;
+    );
+}
+&lt;import React from 'react';&gt;
+&lt;import { Link } from 'react-router-dom';&gt;
+&lt;import { SearchBar } from "./SearchBar";&gt;
+&lt;import { useState, useEffect } from 'react';&gt;
+&lt;import { deleteMemoryBook, mBookList } from './journal/mbookList';&gt;
+
+export function LogSection({ mBookArray, onDelete }) {
+    const mbooks = mBookArray.map((mbook) =&gt; (
+    &lt;div className="log-item-wrapper" key={mbook.title}&gt;
+        &lt;Link to={`/memory-books/${encodeURIComponent(mbook.title.toLowerCase().replace(/\s+/g, '-'))}`} className="log-link"&gt;
+        &lt;div className="log-item"&gt;
+            &lt;img src={mbook.img} alt={mbook.title} /&gt;
+            &lt;h2&gt;{mbook.title}&lt;/h2&gt;
+            {mbook.title !== "All Logs" &amp;&amp; (
+            &lt;button
+                className="delete-btn"
+                onClick={(e) =&gt; {
+                e.preventDefault(); 
+                onDelete(mbook.title);
+                }}
+            &gt;
+                Delete
+            &lt;/button&gt;
+            )}
+        &lt;/div&gt;
+        &lt;/Link&gt;
+    &lt;/div&gt;
+    ));
+
+    return (
+    &lt;div&gt;
+        &lt;div className="actions"&gt;
+        &lt;Link to="/create-memory-book" className="btn create-memory-book-btn"&gt;
+            + Create New Memory Book
+        &lt;/Link&gt;
+        &lt;/div&gt;
+        &lt;div className="logs"&gt;{mbooks}&lt;/div&gt;
+    &lt;/div&gt;
+    );
+}
+
+export function MemoryBooks({ user }) {
+    const [mBookArray, setMemoryBooks] = useState([]); 
+
+    useEffect(() =&gt; {
+    if (user) {
+        mBookList({ setMemoryBooks, user });
+    } else {
+        setMemoryBooks([]);
+    }
+    }, [user]);
+
+    const handleDelete = (title) =&gt; {
+    if (user) {
+        deleteMemoryBook({ title, user, setMemoryBooks });
+    }
+    };
+
+    return (
+    &lt;div&gt;
+        &lt;header className="header-with-img"&gt;
+        &lt;div className="mylog-profile"&gt;
+            &lt;img src="img/pfp.jpg" alt="Profile" className="circle-profile-pic" /&gt;
+            {user ? &lt;h1&gt;{user.userName}&lt;/h1&gt; : &lt;h1&gt;&lt;/h1&gt;}
+        &lt;/div&gt;
+        &lt;/header&gt;
+        &lt;main&gt;
+        &lt;SearchBar user={user} /&gt;
+        &lt;LogSection mBookArray={mBookArray} onDelete={handleDelete} /&gt;
+        &lt;/main&gt;
+    &lt;/div&gt;
+    );
+}
+
+&lt;import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";&gt;
+&lt;import { useState, useEffect } from "react";&gt;
+&lt;import { Routes, Route } from "react-router-dom";&gt;
+&lt;import { Homepage } from "./Homepage";&gt;
+&lt;import { Board } from "./Board";&gt;
+&lt;import { MemoryBooks } from "./MemoryBooks";&gt;
+&lt;import { CreateJournal } from "./CreateJournal";&gt;
+&lt;import { NavigationBar } from "./NavigationBar";&gt;
+&lt;import { Footer } from "./Footer";&gt;
+&lt;import { CreateMemoryBook } from "./CreateMemoryBook";&gt;
+&lt;import { CompleteSubmit } from "./CompleteSubmit.jsx";&gt;
+&lt;import { MoveTo } from "./MoveTo";&gt;
+&lt;import Custom404 from "./NotFound";&gt;
+&lt;import { MySignInScreen } from "./SingInPage.jsx";&gt;
+
+function App() {
+    const [currentUser, setCurrentUser] = useState(null);
+
+    const handleCreateMemoryBook = (newBook) =&gt; {
+    setMemoryBooks((prevBooks) =&gt; [...prevBooks, newBook]);
+    };
+
+    const [isLoading, setIsLoading] = useState(true); 
+
+    useEffect(() =&gt; {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) =&gt; {
+        if (firebaseUser) {
+        console.log("User is logged in:", firebaseUser);
+        setCurrentUser({
+            userName: firebaseUser.displayName,
+            userImg: firebaseUser.photoURL || "/img/plane.jpg",
+            userId: firebaseUser.uid,
+        });
+        } else {
+        console.log("No user logged in");
+        setCurrentUser(null);
+        }
+        setIsLoading(false); 
+    });
+
+    return () =&gt; unsubscribe();
+    }, []);
+
+    if (isLoading) {
+    return &lt;div&gt;Loading...&lt;/div&gt;; 
+    }
+
+    const handleSignOut = async () =&gt; {
+    const auth = getAuth();
+    try {
+        await signOut(auth);
+        console.log("User signed out successfully!");
+    } catch (err) {
+        console.error("Error signing out:", err);
+    }
+    };
+
+    return (
+    &lt;&gt;
+        &lt;NavigationBar onSignOut={handleSignOut} user={currentUser}/&gt;
+        &lt;Routes&gt;
+        &lt;Route path="/" element=&lt;Homepage /&gt; /&gt;
+        &lt;Route path="/home" element=&lt;Homepage user={currentUser}/&gt; /&gt;
+        &lt;Route path="/create" element=&lt;CreateJournal user={currentUser}/&gt; /&gt;
+        &lt;Route path="/sign-in" element=&lt;MySignInScreen /&gt; /&gt;
+        &lt;Route
+            path="/memory-books"
+            element={
+            &lt;MemoryBooks
+                user={currentUser}
+            /&gt;
+            }
+        /&gt;
+        &lt;Route
+            path="/create-memory-book"
+            element=&lt;CreateMemoryBook onCreate={handleCreateMemoryBook} user={currentUser} /&gt;
+        /&gt;
+        &lt;Route
+            path="/memory-books/:bookId"
+            element=&lt;Board user={currentUser} /&gt;
+        /&gt;
+        &lt;Route path="/move-to" element=&lt;MoveTo user= { currentUser }/&gt; /&gt;
+        &lt;Route path="/complete-submit" element=&lt;CompleteSubmit /&gt; /&gt;
+        &lt;Route path="*" element=&lt;Custom404 /&gt; /&gt;
+        &lt;/Routes&gt;
+        &lt;Footer /&gt;
+    &lt;&gt;
+    );
+}
+
+export default App;
+              </code></pre>              
+        </div>
+    </div>
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+
+</html>
